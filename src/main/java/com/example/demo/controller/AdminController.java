@@ -5,8 +5,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
+import com.example.demo.dto.ProductDTO;
 import com.example.demo.model.Category;
 import com.example.demo.service.CategoryService;
+import com.example.demo.service.ProductService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AdminController {
 	@Autowired
 	CategoryService categoryService;
+	@Autowired
+	ProductService productService;
 	@GetMapping("/admin")
 	public String adminHome() {
 		return "adminHome";
@@ -54,5 +59,20 @@ public class AdminController {
 		}else {
 			return "404";
 		}
+	}
+	
+	
+	//Product Section
+	
+	@GetMapping("/admin/products")
+	public String product(Model model) {
+		model.addAttribute("products", productService.getAllProduct());
+		return "products";
+	}
+	@GetMapping("/admin/products/add")
+	public String productAddGet(Model model) {
+		model.addAttribute("productDTO", new ProductDTO());
+		model.addAttribute("categories", categoryService.getAllCategory());
+		return "productsAdd";
 	}
 }
